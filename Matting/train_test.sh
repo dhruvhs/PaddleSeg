@@ -1,0 +1,2 @@
+# CUDA_VISIBLE_DEVICES=0 python -u -m paddle.distributed.launch train.py --config configs/modnet/modnet-mobilenetv2-sup-finetune.yml --do_eval --save_interval 200 --num_workers 5 --save_dir outputs_sup_finetune
+CUDA_VISIBLE_DEVICES=0 python train.py --config configs/modnet/modnet-mobilenetv2-dummy.yml --do_eval --save_interval 200 --num_workers 5 --save_dir outputs_dummy

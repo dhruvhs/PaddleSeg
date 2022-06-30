@@ -1,5 +1,5 @@
 batch_size: 16
-iters: 100000
+iters: 2000
 
 train_dataset:
   type: MattingDataset
@@ -8,7 +8,7 @@ train_dataset:
   transforms:
     - type: LoadImages
     - type: RandomCrop
-      crop_size: [320, 320]
+      crop_size: [512, 512]
     - type: RandomDistort
     - type: RandomBlur
     - type: RandomHorizontalFlip
@@ -22,7 +22,7 @@ val_dataset:
   transforms:
     - type: LoadImages
     - type: ResizeByShort
-      short_size: 320
+      short_size: 512
     - type: ResizeToIntMult
       mult_int: 32
     - type: Normalize
@@ -33,8 +33,8 @@ model:
   type: MODNet
   backbone:
     type: MobileNetV2
-    pretrained: https://hs-ml-models.sgp1.cdn.digitaloceanspaces.com/trained_models/bg_rem/PaddleSeg/model.pdparams
-  pretrained: Null
+    pretrained: model.pdparams
+  pretrained: modnet-mobilenetv2.pdparams
 
 optimizer:
   type: sgd
@@ -43,5 +43,5 @@ optimizer:
 
 lr_scheduler:
   type: PiecewiseDecay
-  boundaries: [40000, 80000]
-  values: [0.02, 0.002, 0.0002]
+  boundaries: [800, 1600]
+  values: [0.0001, 0.00001, 0.00001]

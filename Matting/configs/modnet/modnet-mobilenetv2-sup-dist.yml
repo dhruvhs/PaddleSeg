@@ -1,9 +1,9 @@
-batch_size: 16
+batch_size: 32
 iters: 100000
 
 train_dataset:
   type: MattingDataset
-  dataset_root: data/bgrem_duts_plus_paddle_modnet
+  dataset_root: data/bgrem_sup_person_paddle_modnet
   train_file: train.txt
   transforms:
     - type: LoadImages
@@ -17,7 +17,7 @@ train_dataset:
 
 val_dataset:
   type: MattingDataset
-  dataset_root: data/bgrem_duts_plus_paddle_modnet
+  dataset_root: data/bgrem_sup_person_paddle_modnet
   val_file: val.txt
   transforms:
     - type: LoadImages

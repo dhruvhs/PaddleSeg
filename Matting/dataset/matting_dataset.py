@@ -79,6 +79,8 @@ class MattingDataset(paddle.io.Dataset):
         self.key_del = key_del
         self.if_rssn = if_rssn
 
+        print("Transforms: ", self.transforms)
+
         # check file
         if mode == 'train' or mode == 'trainval':
             if train_file is None:
@@ -110,6 +112,8 @@ class MattingDataset(paddle.io.Dataset):
                 for line in lines:
                     line = line.strip()
                     self.fg_bg_list.append(line)
+        
+        print("Len fg: ", len(self.fg_bg_list))
         if mode != 'val':
             random.shuffle(self.fg_bg_list)
 
@@ -119,9 +123,13 @@ class MattingDataset(paddle.io.Dataset):
         fg_bg_file = fg_bg_file.split(self.separator)
         data['img_name'] = fg_bg_file[0]  # using in save prediction results
         fg_file = os.path.join(self.dataset_root, fg_bg_file[0])
-        alpha_file = fg_file.replace('/fg', '/alpha')
+        assert os.path.exists(fg_file), f"Not found: {fg_file}"
+        alpha_file = fg_file.replace('/fg', '/alpha').replace('.jpg', '.png')
+        assert os.path.exists(alpha_file), f"Not found: {alpha_file}"
         fg = cv2.imread(fg_file)
+        # fg = cv2.resize(fg, (512,512)) # TODO
         alpha = cv2.imread(alpha_file, 0)
+        # alpha = cv2.resize(alpha, (512, 512))
         data['alpha'] = alpha
         data['gt_fields'] = []
 

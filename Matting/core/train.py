@@ -105,7 +105,7 @@ def train(model,
     model.train()
     nranks = paddle.distributed.ParallelEnv().nranks
     local_rank = paddle.distributed.ParallelEnv().local_rank
-
+    print("-----------Nranks, local: ", nranks, local_rank)
     start_iter = 0
     if resume_model is not None:
         start_iter = resume(model, optimizer, resume_model)
@@ -113,7 +113,7 @@ def train(model,
     if not os.path.isdir(save_dir):
         if os.path.exists(save_dir):
             os.remove(save_dir)
-        os.makedirs(save_dir)
+        os.makedirs(save_dir, exist_ok=True)
 
     if nranks > 1:
         # Initialize parallel environment if not done.
