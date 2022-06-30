@@ -70,7 +70,9 @@ class Config(object):
                  path: str,
                  learning_rate: float=None,
                  batch_size: int=None,
-                 iters: int=None):
+                 iters: int=None,
+                 train_data_dir: str = None,
+                 val_data_dir: str = None):
         if not path:
             raise ValueError('Please specify the configuration file path.')
 
@@ -81,6 +83,11 @@ class Config(object):
         self._losses = None
         if path.endswith('yml') or path.endswith('yaml'):
             self.dic = self._parse_from_yaml(path)
+            if train_data_dir is not None:
+                self.dic["train_dataset"]["dataset_root"] = train_data_dir
+            if val_data_dir is not None:
+                self.dic["val_dataset"]["dataset_root"] = val_data_dir
+            print("====> dic: ", self.dic)
         else:
             raise RuntimeError('Config file should in yaml format!')
 

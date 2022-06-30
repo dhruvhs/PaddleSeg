@@ -67,6 +67,20 @@ def parse_args():
         type=str,
         default=None)
     parser.add_argument(
+        "--train_data_dir",
+        dest="train_data_dir",
+        help="train_data_dir",
+        type=str,
+        default=None,
+    )
+    parser.add_argument(
+        "--val_data_dir",
+        dest="val_data_dir",
+        help="val_data_dir",
+        type=str,
+        default=None,
+    )
+    parser.add_argument(
         '--save_dir',
         dest='save_dir',
         help='The directory for saving the model snapshot',
@@ -139,7 +153,10 @@ def main(args):
         args.cfg,
         learning_rate=args.learning_rate,
         iters=args.iters,
-        batch_size=args.batch_size)
+        batch_size=args.batch_size,
+        train_data_dir=args.train_data_dir,
+        val_data_dir=args.val_data_dir,
+    )
 
     train_dataset = cfg.train_dataset
     if train_dataset is None:
