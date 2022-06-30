@@ -24,6 +24,9 @@ from paddleseg.utils import (TimeAverager, calculate_eta, resume, logger,
                              worker_init_fn, train_profiler, op_flops_funs)
 from paddleseg.core.val import evaluate
 
+import wandb
+
+
 
 def check_logits_losses(logits_list, losses):
     len_logits = len(logits_list)
@@ -250,6 +253,11 @@ def train(model,
                              ) // iters_per_epoch + 1, iter, iters, avg_loss,
                             lr, avg_train_batch_cost, avg_train_reader_cost,
                             batch_cost_averager.get_ips_average(), eta))
+                logger.info("Logging to wandb")
+                wandb.log({
+                    "train/loss": avg_loss
+                }, step=iter)
+
                 if use_vdl:
                     log_writer.add_scalar('Train/loss', avg_loss, iter)
                     # Record all losses if there are more than 2 losses.
@@ -285,6 +293,11 @@ def train(model,
                     precision=precision,
                     amp_level=amp_level,
                     **test_config)
+                
+                wandb.log({
+                    "val/mean_iou": mean_iou,
+                    "val/acc": acc,
+                }, step=iter)
 
                 model.train()
 

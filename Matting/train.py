@@ -27,6 +27,10 @@ from core import train
 from model import *
 from dataset import MattingDataset
 
+import wandb
+from dotenv import load_dotenv
+
+load_dotenv(".env")
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Model training')
@@ -152,6 +156,12 @@ def main(args):
     msg += str(cfg)
     msg += '------------------------------------------------'
     logger.info(msg)
+
+    print("Local rank: ", paddle.distributed.ParallelEnv().local_rank)
+
+    if paddle.distributed.ParallelEnv().local_rank == 0:
+        print("init wandb")
+        wandb.init(project="Paddle MODNet", config=vars(args))
 
     train(
         model=cfg.model,

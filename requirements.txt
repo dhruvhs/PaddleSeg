@@ -7,3 +7,5 @@ scipy
 prettytable
 sklearn
 protobuf==3.20.*
+wandb
+python-dotenv

@@ -117,3 +117,4 @@ test_tipc/web/models/
 Matting/*output*/
 Matting/*.*pd*
 Matting/data
+**/wandb/
