@@ -117,4 +117,8 @@ test_tipc/web/models/
 Matting/*output*/
 Matting/*.*pd*
 Matting/data
+Matting/trained_models
+Matting/output/
+**/export_model/
+**/pretrained_model/
 **/wandb/
