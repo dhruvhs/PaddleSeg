@@ -1,0 +1,37 @@
+# https://docs.microsoft.com/en-us/azure/machine-learning/reference-yaml-job-command
+
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+code: .
+command: >-
+  apt-get install ffmpeg libsm6 libxext6 -y &&
+  chmod +x install_test.sh &&
+  ./install_test.sh &&
+  export CUDA_VISIBLE_DEVICES=0,1,2,3 &&
+  python -m paddle.distributed.launch train.py \
+    --config=configs/modnet/modnet-mobilenetv2-sivi.yml \
+    --do_eval \
+    --save_interval=1000 \
+    --num_workers=5 \
+    --save_dir=./outputs \
+    --train_data_dir=${{inputs.dataset}} \
+    --val_data_dir=${{inputs.dataset}}
+
+inputs:
+  dataset:
+    type: mltable
+    path: azureml:bgrem_duts_plus_paddle_modnet:1
+    mode: eval_download
+  threads: 8
+  batch_size: 16
+  epochs: 50
+  lr: 0.000001
+
+# environment: azureml:AzureML-pytorch-1.10-ubuntu18.04-py38-cuda11-gpu:12
+environment: azureml:f3net_env:13
+# compute: azureml:gpu-cluster
+compute: azureml:gpu-cluster-4
+# compute: local
+
+display_name: baseline_duts_plus
+description: baseline_duts_plus
+experiment_name: paddle_modnet_test
