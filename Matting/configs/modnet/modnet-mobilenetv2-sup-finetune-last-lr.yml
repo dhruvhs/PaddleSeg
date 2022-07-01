@@ -1,9 +1,9 @@
-batch_size: 8
-iters: 100000
+batch_size: 16
+iters: 2000
 
 train_dataset:
   type: MattingDataset
-  dataset_root: data/bgrem_duts_plus_paddle_modnet
+  dataset_root: data/bgrem_sup_person_paddle_modnet
   train_file: train.txt
   transforms:
     - type: LoadImages
@@ -19,7 +19,7 @@ train_dataset:
 
 val_dataset:
   type: MattingDataset
-  dataset_root: data/bgrem_duts_plus_paddle_modnet
+  dataset_root: data/bgrem_sup_person_paddle_modnet
   val_file: val.txt
   transforms:
     - type: LoadImages
@@ -35,8 +35,8 @@ model:
   type: MODNet
   backbone:
     type: MobileNetV2
-    pretrained: https://hs-ml-models.sgp1.cdn.digitaloceanspaces.com/trained_models/bg_rem/PaddleSeg/model.pdparams
-  pretrained: Null
+    pretrained: model.pdparams
+  pretrained: modnet-mobilenetv2.pdparams
 
 optimizer:
   type: sgd
@@ -45,5 +45,5 @@ optimizer:
 
 lr_scheduler:
   type: PiecewiseDecay
-  boundaries: [40000, 80000]
-  values: [0.02, 0.002, 0.0002]
+  boundaries: [800, 1600]
+  values: [0.0002, 0.00002, 0.00002]
