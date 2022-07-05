@@ -14,8 +14,8 @@ export CUDA_VISIBLE_DEVICES=-1
 #     --fg_estimate True
 
 python predict.py \
-    --config configs/modnet/modnet-mobilenetv2.yml \
-    --model_path trained_models/mod_finetune_sup/best.pdparams \
+    --config configs/modnet/modnet-mobilenetv2-sup-from-pretrained.yml \
+    --model_path trained_models/mod_finetune_sup/7700.pdparams \
     --image_path /Users/dhruv/cosmos/repo/sivi-ds-bg-rem-models/datasets/bgrem_sup_person_paddle_modnet/val/fg \
     --save_dir ./output/person_results \
     --fg_estimate True
