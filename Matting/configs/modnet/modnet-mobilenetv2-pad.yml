@@ -1,0 +1,51 @@
+batch_size: 8
+iters: 100000
+
+train_dataset:
+  type: MattingDataset
+  dataset_root: data/bgrem_duts_plus_paddle_modnet
+  train_file: train.txt
+  transforms:
+    - type: LoadImages
+    - type: ResizeByLong
+      long_size: 560
+    - type: RandomDistort
+    - type: RandomBlur
+    - type: RandomHorizontalFlip
+    - type: Normalize
+    - type: RandomPaddingCrop
+      crop_size: [512, 512]
+      im_padding_value: [0, 0, 0]
+      label_padding_value: 0
+  mode: train
+
+val_dataset:
+  type: MattingDataset
+  dataset_root: data/bgrem_duts_plus_paddle_modnet
+  val_file: val.txt
+  transforms:
+    - type: LoadImages
+    - type: Normalize
+    - type: Padding
+      target_size: 512
+      m_padding_value: [0, 0, 0]
+      label_padding_value: 0
+  mode: val
+  get_trimap: False
+
+model:
+  type: MODNet
+  backbone:
+    type: MobileNetV2
+    pretrained: https://hs-ml-models.sgp1.cdn.digitaloceanspaces.com/trained_models/bg_rem/PaddleSeg/model.pdparams
+  pretrained: Null
+
+optimizer:
+  type: sgd
+  momentum: 0.9
+  weight_decay: 4.0e-5
+
+lr_scheduler:
+  type: CosineAnnealingDecay
+  learning_rate: 0.02
+  T_max: 100000
