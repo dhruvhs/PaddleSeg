@@ -1,35 +1,39 @@
 batch_size: 8
-iters: 100000
+iters: 255000
 
 train_dataset:
   type: MattingDataset
-  dataset_root: data/bgrem_duts_plus_paddle_modnet
+  dataset_root: /home/azureuser/bgrem_duts_plus_unsp_product_kgecomm_modnet
   train_file: train.txt
   transforms:
     - type: LoadImages
-    - type: ResizeByLong
-      long_size: 560
+    - type: LimitLong
+      min_long: 60
+      max_long: 560
+    - type: RandomCrop
+      crop_size: [[512, 512]]
     - type: RandomDistort
     - type: RandomBlur
     - type: RandomHorizontalFlip
     - type: Normalize
-    - type: RandomPaddingCrop
-      crop_size: [512, 512]
+    - type: Padding
+      target_size: [512, 512]
       im_padding_value: [0, 0, 0]
-      label_padding_value: 0
   mode: train
 
 val_dataset:
   type: MattingDataset
-  dataset_root: data/bgrem_duts_plus_paddle_modnet
+  dataset_root: /home/azureuser/bgrem_duts_plus_unsp_product_kgecomm_modnet
   val_file: val.txt
   transforms:
     - type: LoadImages
     - type: Normalize
+    - type: LimitLong
+      min_long: 60
+      max_long: 512
     - type: Padding
-      target_size: 512
-      m_padding_value: [0, 0, 0]
-      label_padding_value: 0
+      target_size: [512,512]
+      im_padding_value: [0, 0, 0]
   mode: val
   get_trimap: False
 
@@ -46,6 +50,8 @@ optimizer:
   weight_decay: 4.0e-5
 
 lr_scheduler:
+  warmup_iters: 25500
+  warmup_start_lr: 0.000001
   type: CosineAnnealingDecay
   learning_rate: 0.02
-  T_max: 100000
+  T_max: 229500
